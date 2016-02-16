@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-  entry: './entry.js',
+  entry: './src/entry.js',
 
   output: {
     path: path.join(__dirname, 'build'),
