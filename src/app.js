@@ -2,23 +2,13 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux'
+import { loadCore } from 'isolated-core';
 
 import reducer from './reducers';
+import { setState } from './actions/actions'
 import App from './components/App';
 
-function storeState({ getState }) {
-  return (next) => (action) => {
-    let returnValue = next(action);
-    window.top.state = getState();
-    return returnValue;
-  };
-}
-
-const store = createStore(
-  reducer,
-  window.top.state,
-  applyMiddleware(storeState)
-);
+const store = createStore(reducer);
 
 export function attach(uidocument) {
   render((
@@ -31,3 +21,23 @@ export function attach(uidocument) {
 export function detach(uidocument) {
   unmountComponentAtNode(uidocument.getElementById('root'));
 }
+
+export function setup(state) {
+  store.dispatch(setState(state))
+}
+
+require('webpack/hot/dev-server');
+require('webpack-dev-server/client?http://0.0.0.0:8080');
+
+// FIXME: hacky approach to accepting all child updates -- is there a better way?
+module.hot.accept(Object.keys(__webpack_require__.c), () => {
+  console.log('=== swapping core ===')
+  loadCore({
+    scriptURL: 'bundle.js'
+  }).then(function(core) {
+    core.launchCore(store.getState());
+  }, function(core) {
+    console.error(`core #${core.id} failed to load: ${core.type} error`)
+    core.destroyCore();
+  });
+});
