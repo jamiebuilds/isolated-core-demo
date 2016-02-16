@@ -1,0 +1,27 @@
+{
+  "name": "isolated-core-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --progress --colors",
+    "dev": "webpack-dev-server --hot --watch"
+  },
+  "author": "James Kyle <me@thejameskyle.com>",
+  "license": "MIT",
+  "dependencies": {
+    "isolated-core": "^0.1.1",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-redux": "^4.4.0",
+    "redux": "^3.3.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.5.2",
+    "babel-loader": "^6.2.2",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
